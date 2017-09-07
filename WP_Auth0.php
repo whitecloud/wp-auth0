@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: PLUGIN_NAME
- * Description: PLUGIN_DESCRIPTION
+ * Plugin Name: Login by WCA-Auth0
+ * Description: Login by WCA-Auth0 is the modified Login by Auth0 plugin to hardcode all authentication to guideuser for the cloud user guide
  * Version: 3.3.1
  * Author: Auth0
  * Author URI: https://auth0.com
