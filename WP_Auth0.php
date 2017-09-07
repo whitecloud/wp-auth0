@@ -5,6 +5,7 @@
  * Version: 3.3.1
  * Author: Auth0
  * Author URI: https://auth0.com
+ * GitHub Plugin URI: https://github.com/whitecloud/wp-auth0
  */
 define( 'WPA0_PLUGIN_FILE', __FILE__ );
 define( 'WPA0_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
