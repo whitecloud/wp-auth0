@@ -413,8 +413,8 @@ class WP_Auth0_LoginManager {
   public function login_user( $userinfo, $id_token, $access_token ) {
     // If the userinfo has no email or an unverified email, and in the options we require a verified email
     // notify the user he cant login until he does so.
-    $requires_verified_email = $this->a0_options->get( 'requires_verified_email' );
 
+    $requires_verified_email = $this->a0_options->get( 'requires_verified_email' );
 
     if ( ! $this->ignore_unverified_email &&  1 == $requires_verified_email ) {
       if ( empty( $userinfo->email ) ) {
@@ -428,7 +428,22 @@ class WP_Auth0_LoginManager {
       }
 
     }
+	
+// TER Change
+/* At this point, the user is authenticated via Auth0. We redefine the user to be a common user, guideuser, when
+   authenticating with WordPress. This activity entails 3 parts:
+     Updating the $userinfo properties for email, user_id, and user_login
+     Commenting out the code that finds the user based on identity (which we pass in from our own identity provider). I'm sure
+       we could also set $userinfo->identities to null and let the code run, but I commented it out to be safe
+     Commenting out the code that updates the WordPress user with the information from the Auth0 user. We don't want to modify
+       the WordPress guideuser user at all.
+*/
 
+    $userinfo->email = "guideuser@whitecloud.com";
+    $userinfo->user_id = "guideuser";
+    $userinfo->user_login = "guideuser";
+
+/*
     // See if there is a user linked to the same auth0 user_id
     if (isset($userinfo->identities)) {
       foreach ($userinfo->identities as $identity) {
@@ -440,11 +455,15 @@ class WP_Auth0_LoginManager {
     } else {
       $user = $this->users_repo->find_auth0_user( $userinfo->user_id );
     }
+*/
+    $user = $this->users_repo->find_auth0_user( $userinfo->user_id );
 
     $user = apply_filters( 'auth0_get_wp_user', $user, $userinfo );
 
     if ( ! is_null( $user ) ) {
       // User exists! Log in
+// TER Change - commented out this section so we don't update the guideuser properties
+/*
       if ( isset( $userinfo->email ) && $user->data->user_email !== $userinfo->email ) {
 
         $description = $user->data->description;
@@ -472,6 +491,7 @@ class WP_Auth0_LoginManager {
       }
 
       $this->users_repo->update_auth0_object( $user->data->ID, $userinfo );
+*/
 
       $user = apply_filters( 'auth0_get_wp_user' , $user, $userinfo );
 
